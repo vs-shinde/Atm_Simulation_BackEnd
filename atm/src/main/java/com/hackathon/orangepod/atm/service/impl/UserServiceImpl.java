@@ -9,7 +9,6 @@ import com.hackathon.orangepod.atm.model.UserToken;
 import com.hackathon.orangepod.atm.repository.UserRepository;
 import com.hackathon.orangepod.atm.repository.UserTokenRepository;
 import com.hackathon.orangepod.atm.service.AccountService;
-import com.hackathon.orangepod.atm.service.OtpService;
 import com.hackathon.orangepod.atm.service.UserService;
 import com.hackathon.orangepod.atm.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,9 +30,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AccountService accountServices;
-
-    @Autowired
-    private OtpService otpService;
 
     @Autowired
     private UserTokenRepository userTokenRepository;
@@ -176,40 +171,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByContact(request.getContact());
     }
 
-    @Override
-    public int generateAndSendOtp(long userId) {
-
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
-        }
-
-        int otp = otpService.generateOtp();
-        User user = optionalUser.get();
-        String emailSubject = "OTP alert for your HSBC account";
-        String emailMessage = "Your 6 digit OTP is: " + otp + " Note: Never share your OTP with anyone. " +
-                "Bank never asks for OTP.";
-        emailService.sendEmail(emailSubject ,emailMessage,user.getEmail(),null );
-        user.setOtp(otp);
-        userRepository.save(user);
-        return otp; //real time its send to user
-    }
-
-    @Override
-    public void updatePin(UpdatePinDto updatePinDto) throws IllegalArgumentException {
-        //Retrieve user by id
-        Optional<User> optionalUser = userRepository.findById(updatePinDto.getUserId());
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
-        }
-        User user = optionalUser.get();
-
-        //update the user pin
-        user.setPin(updatePinDto.getNewPin());
-        userRepository.save(user);
-
-        String emailSubject = "ATM Pin Updated for your HSBC account";
-        String emailMessage = "Your updated ATM Pin is: " + updatePinDto.getNewPin() + " Note: Never share your ATM Pin with anyone.";
-        emailService.sendEmail(emailSubject ,emailMessage,user.getEmail(),null );
-    }
 }
