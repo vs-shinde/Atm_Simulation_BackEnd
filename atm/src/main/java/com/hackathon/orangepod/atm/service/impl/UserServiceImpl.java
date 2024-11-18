@@ -69,7 +69,8 @@ public class UserServiceImpl implements UserService {
 
         String emailSubject = "New User alert for your HSBC account";
         String emailMessage = "Welcome to HSBC ATM services. Your account number is: " + account.getAccountNumber();
-        emailService.sendTransactionEmail(newUser.getEmail(), emailSubject, emailMessage);
+        emailService.sendEmail(emailSubject ,emailMessage,newUser.getEmail(),null );
+
 
         // Prepare Response
         return ATMResponse.builder()
@@ -188,7 +189,7 @@ public class UserServiceImpl implements UserService {
         String emailSubject = "OTP alert for your HSBC account";
         String emailMessage = "Your 6 digit OTP is: " + otp + " Note: Never share your OTP with anyone. " +
                 "Bank never asks for OTP.";
-        emailService.sendTransactionEmail(user.getEmail(), emailSubject, emailMessage);
+        emailService.sendEmail(emailSubject ,emailMessage,user.getEmail(),null );
         user.setOtp(otp);
         userRepository.save(user);
         return otp; //real time its send to user
@@ -209,6 +210,6 @@ public class UserServiceImpl implements UserService {
 
         String emailSubject = "ATM Pin Updated for your HSBC account";
         String emailMessage = "Your updated ATM Pin is: " + updatePinDto.getNewPin() + " Note: Never share your ATM Pin with anyone.";
-        emailService.sendTransactionEmail(user.getEmail(), emailSubject, emailMessage);
+        emailService.sendEmail(emailSubject ,emailMessage,user.getEmail(),null );
     }
 }

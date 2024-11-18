@@ -52,9 +52,8 @@ public class AccountController {
     }
 
     @PostMapping("/receipt")
-    public ReceiptResponse getReceipt(@RequestParam Long userId, @RequestParam String token,
-                                      @RequestParam Long amount) {
-        return accountService.generateReceipt(userId,token,amount);
+    public ReceiptResponse getReceipt(@RequestBody Receipt receipt) {
+        return accountService.generateReceipt(receipt.getUserId(),receipt.getToken(),receipt.getAmount());
     }
 
     @PostMapping("/depositeReceipt")

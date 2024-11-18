@@ -57,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
 		if (account.get().getBalance() < requestDto.getAmount()) {
 			String emailMessage = "Insufficient funds to withdraw ₹" + requestDto.getAmount() + ". Your balance is ₹"
 					+ account.get().getBalance() + ".";
-			emailService.sendTransactionEmail(userList.getEmail(), EMAIL_SUBJECT, emailMessage);
+			emailService.sendEmail(EMAIL_SUBJECT ,emailMessage,userList.getEmail(),null );
 			throw new InsufficientFundsException("Insufficient funds");
 
 		}
@@ -65,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
 		if (!userTokenService.isWithdrawalLimitValid(requestDto)) {
 			String emailMessage = "Your today's withdrawal limit is reached for ₹" + requestDto.getAmount()
 					+ ". Your balance is ₹" + account.get().getBalance() + ".";
-			emailService.sendTransactionEmail(userList.getEmail(), EMAIL_SUBJECT, emailMessage);
+			emailService.sendEmail(EMAIL_SUBJECT ,emailMessage,userList.getEmail(),null );
 			throw new WithdrawalLimitReachedException("Your today's withdrawal limit is reached");
 		}
 
@@ -74,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
 
 		String emailMessage = "You have successfully withdrawn ₹" + requestDto.getAmount() + ". Your new balance is ₹"
 				+ account.get().getBalance() + ".";
-		emailService.sendTransactionEmail(userList.getEmail(), EMAIL_SUBJECT, emailMessage);
+		emailService.sendEmail(EMAIL_SUBJECT ,emailMessage,userList.getEmail(),null );
 
 		return AccountMapper.mapAccountToDto(account.get());
 	}
@@ -98,7 +98,7 @@ public class AccountServiceImpl implements AccountService {
 
 		String emailMessage = "You have successfully deposited ₹" + depositRequestDto.getAmount()
 				+ ". Your new balance is ₹" + account.get().getBalance() + ".";
-		emailService.sendTransactionEmail(userList.getEmail(), EMAIL_SUBJECT, emailMessage);
+		emailService.sendEmail(EMAIL_SUBJECT ,emailMessage,userList.getEmail(),null );
 
 		return AccountMapper.mapAccountToDto(account.get());
 	}
