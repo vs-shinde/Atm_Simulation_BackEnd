@@ -3,6 +3,7 @@ package com.hackathon.orangepod.atm.utils;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.temporal.ChronoUnit;
+import java.util.Random;
 
 public class AccountUtils {
 
@@ -70,4 +71,25 @@ public class AccountUtils {
         masked.append(accountNumber.substring(length - 4));
         return masked.toString();
     }
+
+    public static Integer generateOtp() {
+
+        Random random = new Random();
+        return random.nextInt(800000)+100000;
+
+  /*    StringBuilder otp = new StringBuilder();
+        for (int i = 0; i <6; i++) {
+          if (i==0){
+              otp.append(0);
+          }
+          else {
+              int digit = (int) (Math.random() * 10);
+              otp.append(digit);
+          }
+    }
+    return Integer.parseInt(String.valueOf(otp))+100000;*/
+    }
+
+
+
 }
